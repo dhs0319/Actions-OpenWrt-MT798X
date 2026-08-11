@@ -34,8 +34,8 @@ git clone --depth=1 -b kix https://github.com/QiuSimons/luci-app-daed.git packag
 # 添加 vmlinux-btf 模块
 git clone --depth=1 https://github.com/QiuSimons/vmlinux-btf.git package/custom/vmlinux-btf
 
-# SSR+
-git clone --depth=1 https://github.com/fw876/helloworld.git package/custom/ssrp
+# honk
+git clone --depth=1 https://github.com/breeze303/openwrt-honk.git package/custom/openwrt-honk
 
 # 功能插件
 git clone --depth=1 https://github.com/sirpdboy/luci-app-poweroffdevice.git package/custom/poweroffdevice
