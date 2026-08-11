@@ -35,7 +35,7 @@ git clone --depth=1 -b kix https://github.com/QiuSimons/luci-app-daed.git packag
 git clone --depth=1 https://github.com/QiuSimons/vmlinux-btf.git package/custom/vmlinux-btf
 
 # honk
-git clone --depth=1 https://github.com/breeze303/openwrt-honk.git package/custom/openwrt-honk
+git clone --depth=1 https://github.com/breeze303/openwrt-honk.git package/custom/honk
 
 # 功能插件
 git clone --depth=1 https://github.com/sirpdboy/luci-app-poweroffdevice.git package/custom/poweroffdevice
