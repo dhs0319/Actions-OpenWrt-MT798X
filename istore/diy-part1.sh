@@ -42,9 +42,6 @@ git clone --depth=1 https://github.com/kenzok8/openwrt-daede.git package/custom/
 # 添加 vmlinux-btf 模块
 git clone --depth=1 https://github.com/QiuSimons/vmlinux-btf.git package/custom/vmlinux-btf
 
-# SSR+
-git clone --depth=1 https://github.com/fw876/helloworld.git package/custom/ssrp
-
 # 功能插件
 git clone --depth=1 https://github.com/sirpdboy/luci-app-poweroffdevice.git package/custom/poweroffdevice
 git clone --depth=1 https://github.com/isalikai/luci-app-owq-wol.git package/custom/owq-wol
