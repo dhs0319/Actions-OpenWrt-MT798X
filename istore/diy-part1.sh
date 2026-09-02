@@ -34,6 +34,16 @@ git clone --depth=1 -b master https://github.com/vernesong/OpenClash.git package
 # HomeProxy and its matching sing-box package
 git clone --depth=1 https://github.com/VIKINGYFY/packages.git package/custom/homeproxy
 
+# opkg treats the upstream 1.14.0_alpha1 constraint as newer than 1.14.0.
+# Keep the regular +sing-box dependency and remove only the incompatible constraint.
+HOMEPROXY_MAKEFILE="package/custom/homeproxy/luci-app-homeproxy/Makefile"
+if [ -f "$HOMEPROXY_MAKEFILE" ]; then
+  sed -i '/^LUCI_EXTRA_DEPENDS:=sing-box (>=1\.14\.0_alpha1)$/d' "$HOMEPROXY_MAKEFILE"
+  echo "Applied HomeProxy sing-box dependency compatibility override"
+else
+  echo "WARNING: HomeProxy Makefile not found; skipping sing-box dependency override" >&2
+fi
+
 # Nikki / Momo
 # git clone --depth=1 https://github.com/CHKayanami/OpenWrt-nikki-rs.git package/custom/nikki-rs
 git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki.git package/custom/nikki
