@@ -33,6 +33,12 @@ else
     fi
 fi
 
+# Replace the source feed versions with the VIKINGYFY packages cloned in diy-part1.
+rm -rf feeds/luci/applications/luci-app-homeproxy
+rm -rf package/feeds/luci/luci-app-homeproxy
+rm -rf feeds/packages/net/sing-box
+rm -rf package/feeds/packages/sing-box
+
 # ---------------------------------------------------------
 # 3. QuickStart 首页温度显示修复
 # ---------------------------------------------------------

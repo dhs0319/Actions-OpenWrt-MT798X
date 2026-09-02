@@ -31,12 +31,12 @@ git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall2 packag
 # OpenClash
 git clone --depth=1 -b master https://github.com/vernesong/OpenClash.git package/custom/openclash
 
-# fchomo
-git clone --depth=1 -b master https://github.com/fcshark-org/openwrt-fchomo.git package/custom/fchomo
+# HomeProxy and its matching sing-box package
+git clone --depth=1 https://github.com/VIKINGYFY/packages.git package/custom/homeproxy
 
 # Nikki / Momo
-git clone --depth=1 https://github.com/CHKayanami/OpenWrt-nikki-rs.git package/custom/nikki-rs
-# git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki.git package/custom/nikki
+# git clone --depth=1 https://github.com/CHKayanami/OpenWrt-nikki-rs.git package/custom/nikki-rs
+git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki.git package/custom/nikki
 git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-momo.git package/custom/momo
 
 # Daed
