@@ -32,7 +32,7 @@ git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall2 packag
 git clone --depth=1 -b master https://github.com/vernesong/OpenClash.git package/custom/openclash
 
 # HomeProxy and its matching sing-box package
-git clone --depth=1 https://github.com/XiaoHaiSly/luci-app-homeproxy.git package/custom/homeproxy
+git clone --depth=1 https://github.com/VIKINGYFY/packages.git package/custom/homeproxy
 
 # clashoo
 git clone --depth=1 https://github.com/kenzok8/openwrt-clashoo.git package/custom/clashoo
