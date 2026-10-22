@@ -34,11 +34,7 @@ git clone --depth=1 -b master https://github.com/vernesong/OpenClash.git package
 # HomeProxy and its matching sing-box package
 git clone --depth=1 https://github.com/VIKINGYFY/packages.git package/custom/homeproxy
 
-# clashoo
-# git clone --depth=1 https://github.com/kenzok8/openwrt-clashoo.git package/custom/clashoo
-
-# Nikki / Momo
-# git clone --depth=1 https://github.com/CHKayanami/OpenWrt-nikki-rs.git package/custom/nikki-rs
+# Nikki
 git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki.git package/custom/nikki
 
 # Daed
