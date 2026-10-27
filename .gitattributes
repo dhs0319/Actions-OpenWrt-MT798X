@@ -1,0 +1,6 @@
+*.sh text eol=lf
+*.mk text eol=lf
+*.txt text eol=lf
+*.config text eol=lf
+*.lua text eol=lf
+*.yml text eol=lf
