@@ -77,24 +77,20 @@ jobs:
       - name: Checkout Projects
         uses: actions/checkout@main
 
+      # 编译目录位于 /mnt，根分区只需放缓存归档等临时文件，后台清理即可，不阻塞后续步骤
       - name: Free Disk Space
         run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost
-          sudo docker image prune --all --force || true
+          nohup sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL /usr/local/share/boost > /dev/null 2>&1 &
           df -h
 
+      # 不做 full-upgrade/autoremove 等与编译无关的系统维护，节省数分钟
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo apt-get -yqq purge firefox
           sudo apt-get -yqq update
-          sudo apt-get -yqq full-upgrade
-          sudo apt-get -yqq autoremove --purge
-          sudo apt-get -yqq autoclean
-          sudo apt-get -yqq clean
 
-          sudo apt-get install -y --no-install-recommends \
+          sudo apt-get install -yqq --no-install-recommends \
             bc bison build-essential bzip2 ca-certificates ccache clang \
             cmake cpio curl device-tree-compiler dos2unix file flex \
             g++-multilib gawk gcc-multilib genisoimage gettext git jq \
@@ -152,9 +148,11 @@ jobs:
 
           cd ./wrt/
           WRT_HASH=$(git rev-parse HEAD)
+          # key 带 run_id：每次成功编译都保存最新 ccache/Go 缓存，旧代由 cache-rollover 清理
+          WRT_CACHE_KEY="$WRT_CACHE_PREFIX-$WRT_HASH-${{github.run_id}}"
           echo "WRT_HASH=$WRT_HASH" >> $GITHUB_ENV
-          echo "WRT_CACHE_KEY=$WRT_CACHE_PREFIX-$WRT_HASH" >> $GITHUB_ENV
-          echo "cache_key=$WRT_CACHE_PREFIX-$WRT_HASH" >> "$GITHUB_OUTPUT"
+          echo "WRT_CACHE_KEY=$WRT_CACHE_KEY" >> $GITHUB_ENV
+          echo "cache_key=$WRT_CACHE_KEY" >> "$GITHUB_OUTPUT"
 
           # GitHub Action 移除国内下载源
           PROJECT_MIRRORS_FILE="./scripts/projectsmirrors.json"
@@ -172,11 +170,16 @@ jobs:
         uses: actions/cache/restore@main
         with:
           key: ${{env.WRT_CACHE_KEY}}
-          restore-keys: ${{env.WRT_CACHE_PREFIX}}-
+          restore-keys: |
+            ${{env.WRT_CACHE_PREFIX}}-${{env.WRT_HASH}}-
+            ${{env.WRT_CACHE_PREFIX}}-
+          # 路径列表需与 Save Build Cache、cache-keepalive.yml 完全一致（缓存版本按路径字符串计算）
           path: |
             ./wrt/.ccache
             ./wrt/staging_dir/host*
             ./wrt/staging_dir/tool*
+            ./wrt/tmp/go-build
+            ./wrt/dl/go-mod-cache
 
       - name: Prepare Restored Build Cache
         if: ${{ !inputs.WRT_TEST && steps.cache-restore.outputs.cache-matched-key != '' }}
@@ -237,7 +240,8 @@ jobs:
           cd ./wrt/
 
           make download -j$(nproc) || make download -j1 V=s
-          find dl -size -1024c -exec ls -l {} \; -exec rm -f {} \;
+          # 仅清理 dl 顶层的残缺源码包，避免误删 dl/go-mod-cache 中的小文件
+          find dl -maxdepth 1 -type f -size -1024c -exec ls -l {} \; -exec rm -f {} \;
 
       - name: SSH Connection To Actions
         if: ${{ !inputs.WRT_TEST && inputs.WRT_SSH }}
@@ -249,7 +253,7 @@ jobs:
           cd ./wrt/
 
           mkdir -p $GITHUB_WORKSPACE/build-reports
-          make -j$(nproc) BUILD_TIME_LOG="$GITHUB_WORKSPACE/build-reports/parallel.tsv" || \
+          make -j$(($(nproc)+1)) BUILD_TIME_LOG="$GITHUB_WORKSPACE/build-reports/parallel.tsv" || \
             make -j1 V=s BUILD_TIME_LOG="$GITHUB_WORKSPACE/build-reports/serial.tsv"
 
       - name: Collect Build Reports
@@ -270,7 +274,7 @@ jobs:
           retention-days: 7
 
       - name: Save Build Cache
-        if: ${{ !inputs.WRT_TEST && success() && steps.cache-restore.outputs.cache-hit != 'true' }}
+        if: ${{ !inputs.WRT_TEST && success() }}
         uses: actions/cache/save@main
         with:
           key: ${{env.WRT_CACHE_KEY}}
@@ -278,6 +282,8 @@ jobs:
             ./wrt/.ccache
             ./wrt/staging_dir/host*
             ./wrt/staging_dir/tool*
+            ./wrt/tmp/go-build
+            ./wrt/dl/go-mod-cache
 
       - name: Machine Information
         run: |
@@ -304,8 +310,6 @@ jobs:
             find ./bin/targets/ -iregex ".*\(buildinfo\|json\|sha256sums\|packages\)$" -exec rm -rf {} +
 
             find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
-
-            make clean -j$(nproc)
           fi
 
       - name: Release Firmware
