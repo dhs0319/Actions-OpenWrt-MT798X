@@ -4,7 +4,9 @@
 
 路由器型号：
 
-     wr30u / JCG Q30 / x60 new / uax3000e / clx s20l / clx s20p
+     wr30u / JCG Q30 / x60 new / uax3000e / clx s20l / clx s20m / clx s20p
+
+S20 系列：运行 Actions 中的 `istore-clx-s20`，使用 `Config/CLX-S20.txt` + `Config/GENERAL.txt` 一次编译 S20L、S20M、S20P，三款固件发布在同一个 Release 中。
 
 说明：
      

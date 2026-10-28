@@ -31,8 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 各机型使用独立的目标平台与 MTK 驱动配置，共用 GENERAL.txt
-        CONFIG: [CLX-S20P, CLX-S20L]
+        CONFIG: [CLX-S20]
         SOURCE: [Yuzhii0718/immortalwrt-mt798x-6.6-padavanonly]
         BRANCH: [openwrt-24.10-6.6]
 
