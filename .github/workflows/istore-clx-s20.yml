@@ -1,5 +1,5 @@
 # 参考 VIKINGYFY/OpenWRT-CI，调用公用编译核心 WRT-CORE.yml
-name: istore-clx-s20p
+name: istore-clx-s20
 
 on:
   repository_dispatch:
@@ -31,7 +31,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONFIG: [CLX-S20P]
+        # 各机型使用独立的目标平台与 MTK 驱动配置，共用 GENERAL.txt
+        CONFIG: [CLX-S20P, CLX-S20L]
         SOURCE: [Yuzhii0718/immortalwrt-mt798x-6.6-padavanonly]
         BRANCH: [openwrt-24.10-6.6]
 
