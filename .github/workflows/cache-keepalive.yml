@@ -18,3 +18,42 @@ jobs:
           path: /tmp/dummy
           key: toolchain-
           lookup-only: true   # 只检查不下载，几秒完成
+
+  # WRT-CORE.yml 生成的 wrt- 前缀缓存：逐个真实恢复一次以刷新最后访问时间，避免 7 天未访问被回收
+  list-wrt-caches:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      keys: ${{steps.list.outputs.keys}}
+    steps:
+      - name: List WRT Caches
+        id: list
+        env:
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GH_REPO: ${{github.repository}}
+        run: |
+          KEYS=$(gh cache list --repo "$GH_REPO" --key "wrt-" --ref "$GITHUB_REF" --limit 100 --json key --jq '[.[].key]')
+          echo "keys=${KEYS:-[]}" >> "$GITHUB_OUTPUT"
+          echo "found caches: ${KEYS:-[]}"
+
+  touch-wrt-caches:
+    needs: list-wrt-caches
+    if: ${{ needs.list-wrt-caches.outputs.keys != '' && needs.list-wrt-caches.outputs.keys != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        key: ${{ fromJSON(needs.list-wrt-caches.outputs.keys) }}
+    steps:
+      - name: Touch WRT Cache
+        uses: actions/cache/restore@main
+        with:
+          key: ${{matrix.key}}
+          # 必须与 WRT-CORE.yml 中的缓存路径完全一致，否则缓存版本不匹配
+          path: |
+            ./wrt/.ccache
+            ./wrt/staging_dir/host*
+            ./wrt/staging_dir/tool*
+            ./wrt/tmp/go-build
+            ./wrt/dl/go-mod-cache
