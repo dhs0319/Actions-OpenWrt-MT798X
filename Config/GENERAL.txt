@@ -1,8 +1,8 @@
 # 通用插件与组件配置，拆分自 istore/istore-clx-s20p.config 第 306-521 行
 
 # Applications
-# CONFIG_PACKAGE_luci-app-daede=y
-# CONFIG_PACKAGE_daed=y
+CONFIG_PACKAGE_luci-app-daede=y
+CONFIG_PACKAGE_daed=y
 CONFIG_PACKAGE_luci-app-nikki=y
 CONFIG_PACKAGE_luci-app-ssr-plus=n
 CONFIG_PACKAGE_luci-app-openclash=n
