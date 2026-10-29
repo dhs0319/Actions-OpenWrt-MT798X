@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONFIG: [CLX-S20]
+        CONFIG: [CLX-S20L]
         SOURCE: [Yuzhii0718/immortalwrt-mt798x-6.6-padavanonly]
         BRANCH: [openwrt-24.10-6.6]
 
