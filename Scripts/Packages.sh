@@ -58,8 +58,8 @@ UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" ""
 #HomeProxy 及配套 sing-box
 UPDATE_PACKAGE "viking" "VIKINGYFY/packages" "" "" "axonhub gecoosac sing-box luci-app-homeproxy luci-app-timewol luci-app-wolplus luci-app-wolultra"
 #Daed 及 vmlinux-btf
-UPDATE_PACKAGE "daed" "kenzok8/openwrt-daede" ""
-UPDATE_PACKAGE "vmlinux-btf" "QiuSimons/vmlinux-btf" ""
+# UPDATE_PACKAGE "daed" "kenzok8/openwrt-daede" ""
+# UPDATE_PACKAGE "vmlinux-btf" "QiuSimons/vmlinux-btf" ""
 
 #功能插件
 UPDATE_PACKAGE "luci-app-poweroffdevice" "sirpdboy/luci-app-poweroffdevice" ""
