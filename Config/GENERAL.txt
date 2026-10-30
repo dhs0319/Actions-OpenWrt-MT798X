@@ -1,8 +1,8 @@
 # 通用插件与组件配置，拆分自 istore/istore-clx-s20p.config 第 306-521 行
 
 # Applications
-CONFIG_PACKAGE_luci-app-daede=y
-CONFIG_PACKAGE_daed=y
+# CONFIG_PACKAGE_luci-app-daede=y
+# CONFIG_PACKAGE_daed=y
 CONFIG_PACKAGE_luci-app-nikki=y
 CONFIG_PACKAGE_luci-app-ssr-plus=n
 CONFIG_PACKAGE_luci-app-openclash=n
@@ -99,8 +99,8 @@ CONFIG_PACKAGE_luci-app-cifs-mount=n #挂载 SMB 网络共享
 # CONFIG_PACKAGE_ksmbd-avahi-service=y  #用于“网络发现”。开启后，你的 Windows 电脑、苹果电脑或手机在“网上邻居”里能直接搜到这台路由器
 
 # istore
-CONFIG_PACKAGE_luci-app-store=y
-CONFIG_PACKAGE_luci-app-quickstart=y
+# CONFIG_PACKAGE_luci-app-store=y
+# CONFIG_PACKAGE_luci-app-quickstart=y
 # CONFIG_PACKAGE_luci-app-istorex=y
 # CONFIG_PACKAGE_luci-app-ddnsto=y
 # CONFIG_PACKAGE_luci-app-fastnet=y
