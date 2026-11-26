@@ -40,7 +40,7 @@ jobs:
       #编译配置：Config/<CONFIG>.txt + Config/GENERAL.txt
       WRT_CONFIG: ${{matrix.CONFIG}}
       #默认主题
-      WRT_THEME: vantage
+      WRT_THEME: 7dollar
       #默认主机名，留空不修改
       WRT_NAME: ''
       #默认WIFI名称/密码，留空不修改（仅对 mac80211 驱动生效）
