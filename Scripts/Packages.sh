@@ -49,7 +49,8 @@ UPDATE_PACKAGE() {
 
 #主题
 # UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-25.12"
-UPDATE_PACKAGE "vantage" "anothaDev/luci-theme-vantage" "main"
+# UPDATE_PACKAGE "vantage" "anothaDev/luci-theme-vantage" "main"
+UPDATE_PACKAGE "vantage" "itsmaiGe/luci-theme-7dollar" "main"
 
 #科学插件
 UPDATE_PACKAGE "passwall" "Openwrt-Passwall/openwrt-passwall" "" "pkg"
