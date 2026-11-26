@@ -35,11 +35,6 @@ if [ -n "$TARGET_LUA" ] && [ -f "$CUSTOM_LUA" ]; then
 	FIX "quickstart" "$(dirname "$TARGET_LUA")" cp -f "$CUSTOM_LUA" "$TARGET_LUA"
 fi
 
-#修改vantage进度条标签字体（anothaDev/luci-theme-vantage#52）
-FIX "theme-vantage" "$PACKAGE_PATH/luci-theme-vantage" sed -i \
-	-e '/^\/\* progress bars: thin track/,$ { /^\.cbi-progressbar::before {/,/^}/ { s/^[[:space:]]*font: 500 var(--fs-micro)\/1\.2 var(--mono);/\tfont: inherit; line-height: normal;/; } }' \
-	"$PACKAGE_PATH/luci-theme-vantage/luci-theme-vantage/htdocs/luci-static/vantage/vantage.css"
-
 #libxcrypt 编译参数修复：禁用 werror，注入 -fcommon
 XCRYPT_MK="$FEEDS_PATH/packages/libs/libxcrypt/Makefile"
 FIX "libxcrypt" "$(dirname "$XCRYPT_MK")" sed -i \
