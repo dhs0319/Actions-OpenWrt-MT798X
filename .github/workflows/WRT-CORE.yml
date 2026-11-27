@@ -41,6 +41,16 @@ on:
       WRT_PACKAGE:
         required: false
         type: string
+      # 可选：锁定源码提交（完整 SHA），留空则使用分支最新提交
+      WRT_COMMIT:
+        required: false
+        default: ''
+        type: string
+      # 可选：机型专用校验脚本（相对仓库根目录），依次以 config / image 参数调用，留空则不校验
+      WRT_VERIFY:
+        required: false
+        default: ''
+        type: string
       WRT_TEST:
         required: false
         default: false
@@ -63,6 +73,8 @@ env:
   WRT_BRANCH: ${{inputs.WRT_BRANCH}}
   WRT_SOURCE: ${{inputs.WRT_SOURCE}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
+  WRT_COMMIT: ${{inputs.WRT_COMMIT}}
+  WRT_VERIFY: ${{inputs.WRT_VERIFY}}
   WRT_TEST: ${{inputs.WRT_TEST}}
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -147,6 +159,11 @@ jobs:
           git clone --depth=1 --single-branch --branch $WRT_BRANCH $WRT_REPO ./wrt/
 
           cd ./wrt/
+          # 指定了提交则按 SHA 浅取并切换，保证源码与校验脚本针对的版本一致
+          if [ -n "$WRT_COMMIT" ]; then
+            git fetch --depth=1 origin "$WRT_COMMIT"
+            git checkout --detach FETCH_HEAD
+          fi
           WRT_HASH=$(git rev-parse HEAD)
           # key 带 run_id：每次成功编译都保存最新 ccache/Go 缓存，旧代由 cache-rollover 清理
           WRT_CACHE_KEY="$WRT_CACHE_PREFIX-$WRT_HASH-${{github.run_id}}"
@@ -231,6 +248,14 @@ jobs:
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
 
+      # 机型专用校验：编译前检查最终 .config，失败则提前终止
+      - name: Verify Configuration
+        if: ${{ inputs.WRT_VERIFY != '' }}
+        run: |
+          cd ./wrt/
+
+          bash "$GITHUB_WORKSPACE/$WRT_VERIFY" config
+
       - name: Prepare Rust Toolchain
         if: ${{ !inputs.WRT_TEST }}
         run: |
@@ -289,6 +314,14 @@ jobs:
             ./wrt/tmp/go-build
             ./wrt/dl/go-mod-cache
 
+      # 机型专用校验：编译后检查固件与软件包清单，失败则不发布
+      - name: Verify Firmware
+        if: ${{ !inputs.WRT_TEST && inputs.WRT_VERIFY != '' }}
+        run: |
+          cd ./wrt/
+
+          bash "$GITHUB_WORKSPACE/$WRT_VERIFY" image
+
       - name: Machine Information
         run: |
           cd ./wrt/
@@ -315,6 +348,9 @@ jobs:
             find ./bin/targets/ -iregex ".*\(buildinfo\|json\|sha256sums\|packages\)$" -exec rm -rf {} +
 
             find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
+
+            # 校验脚本生成的报告（build-reports/verify-*.json）随固件一起发布
+            cp -f "$GITHUB_WORKSPACE"/build-reports/verify-*.json ./upload/ 2>/dev/null || true
           fi
 
       - name: Release Firmware
