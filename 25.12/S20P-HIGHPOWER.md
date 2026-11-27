@@ -1,8 +1,10 @@
 # S20P high-power radio configuration
 
-The highpower workflow (`25.12-clx-s20p.yml`) builds from
-`mt7986-clx-s20p.config`, which directly selects the `mt7986-fw-20240823`
-firmware bundle and the high-power radio options.
+The highpower workflow (`25.12-clx-s20p.yml`, which calls `WRT-CORE.yml`) builds
+from `Config/CLX-S20P.txt` plus `Config/GENERAL.txt`. `CLX-S20P.txt` directly
+selects the `mt7986-fw-20240823` firmware bundle and the high-power radio
+options. The workflow pins the source commit (`WRT_COMMIT`) and runs
+`25.12/check-s20p.sh` (`WRT_VERIFY`) before and after the build.
 
 ## Verified configuration gap
 
@@ -33,4 +35,4 @@ establish their RF equivalence.
 
 Before publishing, `check-s20p-power-table.py` verifies the resolved choices,
 the loader patch, the source BIN and the installed target-rootfs BIN. The
-workflow publishes `power-table-verification.json` alongside the firmware.
+workflow publishes `verify-power-table.json` alongside the firmware.
