@@ -1,5 +1,5 @@
 #!/bin/bash
-# 参考 VIKINGYFY/OpenWRT-CI 的 Handles.sh，修补内容迁移自原 istore/diy-part2.sh、diy-partX.sh
+# 参考 VIKINGYFY/OpenWRT-CI 的 Handles.sh，修补内容迁移自原 istore/diy-part2.sh、diy-partX.sh、25.12/diy-part2.sh
 
 FEEDS_PATH="./feeds"
 PACKAGE_PATH="./package"
@@ -58,3 +58,37 @@ FIX "openlist2" "$OPENLIST2_DIR" MOVE_MENU "$OPENLIST2_DIR" "openlist2" "nas" "s
 RUBY_MK=$(find $FEEDS_PATH -name "Makefile" -path "*/lang/ruby/Makefile" 2>/dev/null | head -n 1)
 FIX "ruby-yjit" "$(dirname "${RUBY_MK:-/nonexistent/x}")" sed -i \
 	'/config RUBY_ENABLE_YJIT/,/help/{s/default y.*/default n/g}' "$RUBY_MK"
+
+#内核配置追加（OpenWrt 25.x / kernel 6.12+）：eBPF、XDP、conntrack 增强
+KCONF_DIR="./target/linux/mediatek/filogic"
+APPEND_KCONF() {
+	local CONF
+	for CONF in "$KCONF_DIR"/config-*; do
+		[ -f "$CONF" ] || continue
+		cat >> "$CONF" << 'EOF'
+
+# Cgroup BPF（daed 必需，SOCK_CGROUP_DATA 已被自动选中）
+CONFIG_CGROUP_BPF=y
+
+# eBPF 增强（BPF/BPF_SYSCALL/BPF_JIT 已是 25.x 默认值）
+CONFIG_BPF_JIT_ALWAYS_ON=y
+
+# eBPF 网络调度（NET_SCHED 已是默认值）
+CONFIG_NET_CLS_ACT=y
+CONFIG_NET_ACT_BPF=m
+CONFIG_NET_CLS_BPF=m
+
+# XDP / 高速数据路径
+CONFIG_XDP_SOCKETS=y
+CONFIG_BPF_STREAM_PARSER=y
+
+# 诊断接口（INET_DIAG 已是默认值）
+CONFIG_INET_TCP_DIAG=y
+
+# Conntrack 增强（EVENTS/CT_NETLINK 已是默认值）
+CONFIG_NF_CONNTRACK_TIMESTAMP=y
+CONFIG_NF_CONNTRACK_LABELS=y
+EOF
+	done
+}
+FIX "kernel-config" "$KCONF_DIR" APPEND_KCONF
