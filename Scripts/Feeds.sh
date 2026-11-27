@@ -15,10 +15,12 @@ ADD_FEED() {
 	fi
 }
 
+#25.12 / S20P 当前不使用 iStore 与 NAS 软件源（Config/GENERAL.txt 中相关插件均已注释）；
+#需要时取消下面几行的注释，并同步启用 Config 中对应插件
 #NAS
-ADD_FEED "nas" "src-git nas https://github.com/linkease/nas-packages.git;master"
-ADD_FEED "nas_luci" "src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main"
+#ADD_FEED "nas" "src-git nas https://github.com/linkease/nas-packages.git;master"
+#ADD_FEED "nas_luci" "src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main"
 #iStore
-ADD_FEED "istore" "src-git istore https://github.com/linkease/istore;main"
+#ADD_FEED "istore" "src-git istore https://github.com/linkease/istore;main"
 
 cat "$FEEDS_CONF"
