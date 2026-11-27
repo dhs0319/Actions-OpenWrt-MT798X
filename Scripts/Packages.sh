@@ -1,5 +1,5 @@
 #!/bin/bash
-# 参考 VIKINGYFY/OpenWRT-CI 的 Packages.sh，插件列表保持与原 istore/diy-part1.sh、diy-part2.sh 一致
+# 参考 VIKINGYFY/OpenWRT-CI 的 Packages.sh，插件列表迁移自原 25.12/diy-part1.sh，配合 25.12 源码使用
 
 #安装和更新软件包
 UPDATE_PACKAGE() {
@@ -67,6 +67,7 @@ UPDATE_PACKAGE "viking" "VIKINGYFY/packages" "" "" "axonhub gecoosac sing-box lu
 UPDATE_PACKAGE "luci-app-poweroffdevice" "sirpdboy/luci-app-poweroffdevice" ""
 UPDATE_PACKAGE "luci-app-owq-wol" "isalikai/luci-app-owq-wol" ""
 UPDATE_PACKAGE "lucky" "gdy666/luci-app-lucky" ""
+UPDATE_PACKAGE "openlist2" "sbwml/luci-app-openlist2" ""
 UPDATE_PACKAGE "rtp2httpd" "stackia/rtp2httpd" ""
 UPDATE_PACKAGE "luci-app-watchdog" "sirpdboy/luci-app-watchdog" ""
 UPDATE_PACKAGE "luci-app-taskplan" "sirpdboy/luci-app-taskplan" ""
@@ -97,8 +98,8 @@ REPLACE_FEED() {
 	echo "$FEED_DIR has been replaced by $FEED_REPO!"
 }
 
-#golang 升级（mosdns 等需要较新的 golang）
-REPLACE_FEED "./feeds/packages/lang/golang" "sbwml/packages_lang_golang" "26.x"
+#golang：25.12 的 packages feed 已自带 Go 1.26（golang/golang1.26 + golang-bootstrap），
+#不再用 sbwml 的 golang 替换，否则与 feed 的 golang-package.mk 结构冲突
 #smartdns 升级
 REPLACE_FEED "./feeds/packages/net/smartdns" "pymumu/openwrt-smartdns" "master"
 REPLACE_FEED "./feeds/luci/applications/luci-app-smartdns" "pymumu/luci-app-smartdns" "master"
