@@ -14,8 +14,8 @@ mkdir -p package/custom
 
 # 科学插件
 # Passwall
-rm -rf feeds/packages/net/{xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,trojan-plus,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls}
-git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git package/custom/passwall-packages
+# rm -rf feeds/packages/net/{xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,trojan-plus,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls}
+# git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git package/custom/passwall-packages
 rm -rf feeds/luci/applications/luci-app-passwall
 git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall.git package/custom/passwall
 git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall2.git package/custom/passwall2
@@ -26,18 +26,28 @@ git clone --depth=1 -b master https://github.com/vernesong/OpenClash.git package
 
 # Nikki / Momo
 git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki.git package/custom/nikki
+
 git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-momo.git package/custom/momo
 
 # Daed
+git clone --depth=1 https://github.com/QiuSimons/luci-app-honk.git package/custom/daed-honk
+# git clone --depth=1 https://github.com/breeze303/openwrt-honk.git package/custom/daed-honk
+
 git clone --depth=1 -b kix https://github.com/QiuSimons/luci-app-daed.git package/custom/daed
 # git clone --depth=1 -b master https://github.com/QiuSimons/luci-app-daed.git package/custom/daed
+
+#homeproxy
+git clone --depth=1 https://github.com/VIKINGYFY/packages.git package/custom/luci-app-homeproxy
 # 添加 vmlinux-btf 模块
 git clone --depth=1 https://github.com/QiuSimons/vmlinux-btf.git package/custom/vmlinux-btf
 
+git clone --depth=1 https://github.com/kenzok8/openwrt-daede.git package/custom/daede
+
 # SSR+
-git clone --depth=1 https://github.com/fw876/helloworld.git package/custom/ssrp
+# git clone --depth=1 https://github.com/fw876/helloworld.git package/custom/ssrp
 
 # 功能插件
+git clone --depth=1 https://github.com/Zerogiven-OpenWRT-Packages/luci-app-podman.git package/custom/podman
 git clone --depth=1 https://github.com/sirpdboy/luci-app-poweroffdevice.git package/custom/poweroffdevice
 git clone --depth=1 https://github.com/isalikai/luci-app-owq-wol.git package/custom/owq-wol
 git clone --depth=1 https://github.com/gdy666/luci-app-lucky.git package/custom/lucky
@@ -88,7 +98,13 @@ git clone --depth=1 https://github.com/Tokisaki-Galaxy/luci-app-tailscale-commun
 
 # 主题
 git clone --depth=1 -b openwrt-25.12 https://github.com/sbwml/luci-theme-argon.git package/custom/luci-theme-argon
-
+# Vantage 主题与 LuCI 应用位于同一个仓库
+VANTAGE_DIR="package/custom/vantage-src"
+rm -rf "$VANTAGE_DIR" package/custom/luci-theme-vantage package/custom/luci-app-vantage
+git clone --depth=1 https://github.com/anothaDev/luci-theme-vantage.git "$VANTAGE_DIR"
+mv "$VANTAGE_DIR/luci-theme-vantage" package/custom/luci-theme-vantage
+mv "$VANTAGE_DIR/luci-app-vantage" package/custom/luci-app-vantage
+rm -rf "$VANTAGE_DIR"
 git clone --depth=1 https://github.com/eamonxg/luci-theme-aurora.git package/custom/luci-theme-aurora
 git clone --depth=1 https://github.com/eamonxg/luci-app-aurora-config.git package/custom/luci-app-aurora-config
 
